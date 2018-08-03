@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import br.com.fiap.spring.model.Carro;
 
@@ -17,9 +18,11 @@ public class CarroController {
 	}
 	
 	@PostMapping("cadastrar")
-	public String processarForm(Carro c) {
+	public ModelAndView processarForm(Carro c) {
 		System.out.println(c.getPlaca() + " " + c.getPreco() + " " 
 				+ c.isAutomatico() + " " + c.getMarca());
-		return "carro/form";
+		ModelAndView retorno = new ModelAndView("carro/form");
+		retorno.addObject("carro", c);
+		return retorno;
 	}
 }

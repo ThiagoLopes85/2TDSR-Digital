@@ -32,6 +32,10 @@
 		</div>
 		<input type="submit" value="OK">
 	</form>
+	${carro.placa }
+	${carro.preco }
+	${carro.marca }
+	${carro.automatico }
 
 </body>
 </html>
