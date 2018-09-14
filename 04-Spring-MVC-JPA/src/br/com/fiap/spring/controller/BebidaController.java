@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.fiap.jpa.dao.BebidaDAO;
+import br.com.fiap.jpa.exception.KeyNotFoundException;
 import br.com.fiap.spring.model.Bebida;
 
 @Controller
@@ -19,6 +20,32 @@ public class BebidaController {
 
 	@Autowired
 	private BebidaDAO dao;
+	
+	@GetMapping("pesquisar")
+	public ModelAndView buscar(String nome) {
+		return new ModelAndView("bebida/lista")
+				.addObject("bebidas", dao.buscarPorNome(nome) );
+	}
+	
+	@Transactional
+	@PostMapping("remover")
+	public String excluir(int codigo, RedirectAttributes r) {
+		try {
+			dao.delete(codigo);
+			r.addFlashAttribute("msg", "Bebida excluida");
+		} catch (KeyNotFoundException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/bebida/listar";
+	}
+	
+	@Transactional
+	@PostMapping("editar")
+	public String processarEdicao(Bebida bebida, RedirectAttributes r) {
+		dao.update(bebida);		
+		r.addFlashAttribute("msg", "Bebida atualizada!");
+		return "redirect:/bebida/listar";
+	}
 	
 	@GetMapping("editar/{id}")
 	public ModelAndView abrirEdicao(@PathVariable("id") int codigo) {
